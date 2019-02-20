@@ -1,0 +1,10 @@
+version: "3"
+services:
+  nitroxserver:
+    build:
+      context: .
+      dockerfile: Dockerfile.Nitrox
+    ports:
+      - "11000:11000"
+    volumes:
+      - ../../Subnautica:/app/subnautica

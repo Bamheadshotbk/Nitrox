@@ -1,0 +1,13 @@
+FROM mono:5.18.0.225
+LABEL maintainer="Brian Popow <popow@gmx.de>"
+
+ENV TERM xterm
+EXPOSE 11000
+EXPOSE 11000/udp
+
+COPY . /app/
+
+WORKDIR /app/NitroxServer
+RUN echo "/app/subnautica" > path.txt
+
+CMD ["mono", "./bin/Release/NitroxServer.exe"]
