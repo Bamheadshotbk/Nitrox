@@ -5,6 +5,6 @@ services:
       context: .
       dockerfile: Dockerfile.Nitrox
     ports:
-      - "11000:11000"
+      - 11000:11000/udp      
     volumes:
       - ../../Subnautica:/app/subnautica
