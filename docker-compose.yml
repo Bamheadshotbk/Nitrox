@@ -7,4 +7,7 @@ services:
     ports:
       - 11000:11000/udp      
     volumes:
-      - ../../Subnautica:/app/subnautica
+    # set SUBNAUTICADIR to the path where your subnautica is installed,
+    # like this: export SUBNAUTICADIR=../Subnautica
+    # defaults to ../Subnautica, if not set
+      - ${SUBNAUTICADIR}:/app/subnautica
