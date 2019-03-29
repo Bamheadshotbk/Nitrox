@@ -3,6 +3,8 @@ using ProtoBufNet;
 using System.Collections.Generic;
 using NitroxModel.DataStructures.Util;
 using UnityEngine;
+using NitroxModel.Core;
+using NitroxServer.GameLogic.Items;
 
 namespace NitroxServer.GameLogic.Vehicles
 {
@@ -21,11 +23,8 @@ namespace NitroxServer.GameLogic.Vehicles
             }
             set { vehiclesByGuid = value; }
         }
-
         [ProtoIgnore]
         private Dictionary<string, VehicleModel> vehiclesByGuid = new Dictionary<string, VehicleModel>();
-
-
         
         public void UpdateVehicle(VehicleMovementData vehicleMovement)
         {
@@ -89,7 +88,23 @@ namespace NitroxServer.GameLogic.Vehicles
         {
             lock (vehiclesByGuid)
             {
+                RemoveItemsFromVehicle(guid);
                 vehiclesByGuid.Remove(guid);
+            }
+        }
+
+        private void RemoveItemsFromVehicle(string guid)
+        {
+            // Remove items in vehicles (for now just batteries)
+            VehicleModel vehicle = vehiclesByGuid[guid];
+            InventoryData data = NitroxServiceLocator.LocateService<InventoryData>();
+            data.StorageItemRemoved(vehicle.Guid);
+            if (vehicle.InteractiveChildIdentifiers.IsPresent())
+            {
+                foreach (InteractiveChildObjectIdentifier child in vehicle.InteractiveChildIdentifiers.Get())
+                {
+                    data.StorageItemRemoved(child.Guid);
+                }
             }
         }
 
@@ -117,6 +132,5 @@ namespace NitroxServer.GameLogic.Vehicles
                 }
             }
         }
-
     }
 }
